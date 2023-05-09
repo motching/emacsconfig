@@ -69,15 +69,6 @@
     (impatient-mode)
     (imp-set-user-filter 'markdown-html))
 
-(use-package dante
-  :ensure t
-  :after haskell-mode
-  :commands 'dante-mode
-  :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  (add-hook 'haskell-mode-hook 'dante-mode)
-  )
-
 (use-package exec-path-from-shell
   :ensure t)
 
@@ -357,24 +348,6 @@
     (insert-file-contents filePath)
     (buffer-string)))
 
-;;(el-get-bundle slack)
-(use-package slack
-  :ensure t
-  :commands (slack-start)
-  :init
-  (setq slack-buffer-emojify t)
-  (setq slack-prefer-current-team t)
-  :config
-  (slack-register-team
-   :name "fusedesk"
-   :default t
-   :client-id "aaaaaaaaaaa.00000000000"
-   :client-secret "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-   :token (trim-final-newline (get-string-from-file "~/.emacs.d/slack_token"))
-   :subscribed-channels '()
-   :full-and-display-names t)
-  )
-
 (use-package alert
   :ensure t
   :commands (alert)
@@ -383,28 +356,12 @@
 
 (defun slack-user-status (_id _team) "")
 
-;; (add-to-list
-;;  'alert-user-configuration
-;;  '(((:title . "\\(fusedesk-dev\\)")
-;;     (:category . "slack"))
-;;    libnotify nil))
-
-;; (add-to-list
-;;  'alert-user-configuration
-;;  '(((:message . "@akovacs101386\\|Attila"))
-;;    libnotify nil)
-;; )
-
 ;;disable splash screen
 (setq inhibit-startup-message t)
-
-;;(use-package scroll-bar-mode
-;;  :ensure t)
 
 ;;hide bars
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-;;(scroll-bar-mode -1)
 
 ;;disable electric-indent-mode
 (electric-indent-mode -1)
@@ -413,9 +370,7 @@
 ;;whitespace-mode
 (use-package whitespace
   :ensure t)
-;;(setq whitespace-style '(face empty lines-tail trailing))
 (setq whitespace-style '(face empty tabs lines-tail trailing))
-;;(setq-default indent-tabs-mode t)
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
 (global-whitespace-mode t)
@@ -434,11 +389,6 @@
 (setq flycheck-pos-tip-timeout 1)
 (setq flycheck-display-errors-function nil)
 (add-hook 'after-init-hook #'global-flycheck-mode)
-;;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-
-;; no paredit for now
-;; (require 'paredit)
-;; (add-hook 'prog-mode-hook #'enable-paredit-mode)
 
 (use-package paren
   :ensure t)
@@ -462,8 +412,6 @@
 
 ;;set scratch message
 (setq initial-scratch-message "Far and away the best prize that life has to offer is the chance to work hard at work worth doing.")
-
-;;line length
 
 ;;Turn on region uppercase and lowercase
 (put 'upcase-region 'disabled nil)
@@ -551,30 +499,6 @@
   (lambda (item)
     (add-to-list 'custom-theme-load-path item)))
 
-;; (defun my-haskell-hook ()
-;;   (setq compile-command "stack build --fast --test --bench --no-run-tests --no-run-benchmarks"))
-
-
-;; ;;haskell
-;; (add-hook 'haskell-mode-hook #'hindent-mode)
-;; (add-hook 'haskell-mode-hook #'my-haskell-hook)
-
-(setq haskell-process-args-ghci
-      '("-ferror-spans" "-fshow-loaded-modules"))
-
-;; (setq haskell-process-args-cabal-repl
-;;       '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
-
-;; (setq haskell-process-args-stack-ghci
-;;       '("--ghci-options=-ferror-spans -fshow-loaded-modules"
-;;         "--no-build" "--no-load"))
-
-;; (setq haskell-process-args-cabal-new-repl
-;;       '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
-
-;; (setq haskell-process-args-cabal-repl
-;; '("--ghc-options -fshow-loaded-modules --ghc-options -ferror-spans"))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -583,6 +507,82 @@
  '(ansi-color-names-vector
    ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
  '(compilation-message-face 'default)
+ '(connection-local-criteria-alist
+   '(((:application tramp)
+      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+ '(connection-local-profile-alist
+   '((tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . tramp-ps-time)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (user . string)
+       (group . string)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (ttname . string)
+       (time . tramp-ps-time)
+       (nice . number)
+       (etime . tramp-ps-time)
+       (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (group . string)
+       (comm . 52)
+       (state . string)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . number)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh")
+      (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":")
+      (null-device . "/dev/null"))))
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
@@ -590,14 +590,6 @@
  '(custom-safe-themes
    '("285d1bf306091644fb49993341e0ad8bafe57130d9981b680c1dbd974475c5c7" "0dd2666921bd4c651c7f8a724b3416e95228a13fca1aa27dc0022f4e023bf197" "653574dd35a64b45030075c99bb9e73f26d8abc7f21e145321e64fa2659fb6f5" "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c" "30289fa8d502f71a392f40a0941a83842152a68c54ad69e0638ef52f04777a4c" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
  '(fci-rule-color "#eee8d5")
- '(haskell-ask-also-kill-buffers nil)
- '(haskell-compile-cabal-build-command
-   "cd %s && cabal build --ghc-option=-ferror-spans --ghc-option=-threaded")
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type 'cabal-repl)
- '(haskell-tags-on-save t)
  '(helm-git-grep-candidate-number-limit nil)
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
@@ -626,7 +618,7 @@
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project dante indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode slack bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep circe vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion haskell-mode scion treemacs use-package solarized-theme js2-closure helm flycheck dockerfile-mode))
+   '(0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs use-package solarized-theme js2-closure helm flycheck dockerfile-mode))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(safe-local-variable-values
@@ -669,51 +661,6 @@
    ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
  '(xterm-color-names-bright
    ["#fdf6e3" "#cb4b16" "#93a1a1" "#839496" "#657b83" "#6c71c4" "#586e75" "#002b36"]))
-(eval-after-load 'haskell-mode '(progn
-                                  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-                                  (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-interactive-bring)
-                                  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
-                                  (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
-(eval-after-load 'haskell-cabal '(progn
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
-
-;;exec-path-from-shell should do this
-;; (let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
-;;   (setenv "PATH" (concat my-cabal-path path-separator (getenv "PATH")))
-;;   (add-to-list 'exec-path my-cabal-path))
-
-
-
-(eval-after-load 'haskell-mode '(progn
-                                  (define-key haskell-mode-map (kbd "C-c C-o") 'haskell-compile)
-                                  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
-                                  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
-                                  (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
-                                  (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
-(eval-after-load 'haskell-cabal '(progn
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-o") 'haskell-compile)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-                                   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
-
-;;clojure
-(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-
-;;scala
-(add-hook 'scala-mode-hook 'ensime-mode)
-
-;;cscope
-;; (require 'xcscope)
-;; (cscope-setup)
 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
@@ -721,7 +668,7 @@
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 
-                                        ;and html;
+;and html
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 
 ;;javascript
@@ -750,7 +697,6 @@
 ;;flycheck's syntax checking should be superior to js2-mode
 (setq js2-mode-show-parse-errors nil)
 (setq js2-mode-show-strict-warnings nil)
-;;(global-set-key (kbd "C-c C-'") 'js2-display-error-list)
 
 (setq-default js2-global-externs '("define"
                                    "module"
@@ -773,20 +719,9 @@
 (setq-default js2-idle-timer-delay 0.1)
 (add-to-list 'auto-mode-alist '("\\.js$" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.swift$" . swift-mode))
-;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-;;(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-;;(add-hook 'js2-mode-hook (lambda () (js2-refactor-mode t)))
 
 (use-package amd-mode
   :ensure t)
-
-;; (require 'requirejs)
-;; (require 'requirejs-mode)
-;; (add-hook 'js2-mode-hook
-;;           '(lambda ()
-;;              (requirejs-mode)
-;;              (setq requirejs-require-base "/home/attila/Projects/fusedesk/FuseDesk-Web-App/app/lib")
-;;              ))
 
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers
@@ -827,18 +762,10 @@
 (setq split-height-threshold 0)
 (setq split-width-threshold nil)
 
-;;exec-path-from-shell should do this
-;; (setq exec-path (append exec-path '("/usr/local/bin")))
-;; (setq exec-path (append exec-path '("/usr/local/bin")))
-;; (setq exec-path (append exec-path '("/home/attila/.cabal/bin")))
-
 ;;fold
 (use-package vimish-fold
   :ensure t)
 (vimish-fold-global-mode 1)
-
-;; irc
-(setq circe-reduce-lurker-spam t)
 
 ;; for better jsx syntax-highlighting in web-mode
 ;; - courtesy of Patrick @halbtuerke
@@ -847,7 +774,6 @@
       (let ((web-mode-enable-part-face nil))
         ad-do-it)
     ad-do-it))
-
 
 (defun my-c-hook ()
   (setq c-basic-offset 2)
@@ -882,15 +808,5 @@
 (fset 'insert-jsdoc-header
    (kmacro-lambda-form [?\C-a return up tab ?/ ?* ?* return ?* tab return ?* ?/ tab up ? ] 0 "%d"))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(slack-message-output-header ((t (:foreground "dark goldenrod" :weight bold :height 1.0 :family "Source Code Pro"))))
- '(slack-message-output-text ((t (:foreground "dark olive green" :weight bold :height 0.9 :family "Source Code Pro")))))
-;;;;;;;;;;;;;;SUPPRESSED WARNINGS;;;;;;;;;;;;;;;;;
-;; Local Variables:
-;; byte-compile-warnings: (not free-vars)
 ;; End:
 (put 'narrow-to-region 'disabled nil)
