@@ -1,19 +1,15 @@
 ;;Emacs config
 
-(setq debug-on-error 1)
+;; Set load path
+(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 
-(setq require-final-newline t) ; Makes sure the last line is terminated.
-;; (If require-final-newline is not on, Emacs will too easily let you generate
-;; text files where the last line has no terminating newline, which confuses
-;; several tools).
+;; Tell Flycheck where to find files
+;; TODO warning here
+(setq flycheck-emacs-lisp-load-path 'inherit)
 
-(setq confirm-kill-emacs 'yes-or-no-p)
-
-;; I don't need lockfiles
-(setq create-lockfiles nil)
-
-;;autosave
-(defvar auto-save-interval 1000)
+;; Load "modules"
+(require 'general)
+(require 'looks)
 
 ;;put backup files into a temporary directory
 (setq backup-directory-alist
@@ -31,6 +27,7 @@
  package-archive-priorities '(("melpa-stable" . 1)))
 
 (package-initialize)
+
 (when (not package-archive-contents)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -203,8 +200,6 @@
 
 (define-key magit-status-mode-map (kbd "#") #'th/magit-aux-commands)
 
-(setenv "EDITOR" "emacs")
-
 (use-package helm
   :ensure t)
 
@@ -216,18 +211,6 @@
 
 (use-package treemacs
   :ensure t)
-
-(use-package solarized-theme
-  :ensure t)
-
-(load-theme 'solarized-light t)
-
-;; Set default font
-(set-face-attribute 'default nil
-                    :family "Monoid"
-                    :height  110
-                    :weight 'normal
-                    :width 'normal)
 
 ;;my keybindings
 (global-set-key (kbd "C-c a") 'ace-window)
@@ -354,15 +337,6 @@
   :init
   (setq alert-default-style 'notifier))
 
-(defun slack-user-status (_id _team) "")
-
-;;disable splash screen
-(setq inhibit-startup-message t)
-
-;;hide bars
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-
 ;;disable electric-indent-mode
 (electric-indent-mode -1)
 (add-hook 'after-change-major-mode-hook (lambda() (electric-indent-mode -1)))
@@ -400,8 +374,7 @@
   :ensure t)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
-;;replace in rectangles
-(cua-selection-mode 1)
+
 
 ;; UTF-8
 (setq locale-coding-system 'utf-8)
@@ -409,43 +382,6 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-
-;;set scratch message
-(setq initial-scratch-message "Far and away the best prize that life has to offer is the chance to work hard at work worth doing.")
-
-;;Turn on region uppercase and lowercase
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-
-;;sane handling of selected text
-(delete-selection-mode 1)
-
-;; Scrolling
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 3))
-      mouse-wheel-progressive-speed nil
-      mouse-wheel-follow-mouse 't
-      scroll-step 1)
-
-;;smooth scrolling
-(setq scroll-conservatively 101)
-
-;;auto-revert (e.g. changing git branches)
-(global-auto-revert-mode t)
-
-;;add semi-slow scroll
-(defun up-semi-slow () (interactive) (scroll-up 2))
-(defun down-semi-slow () (interactive) (scroll-down 2))
-(global-set-key "\M-N" 'up-semi-slow)
-(global-set-key "\M-P" 'down-semi-slow)
-
-;;display column number
-(setq column-number-mode t)
-
-;;Cycle through buffers (like Firefox)
-(global-set-key (kbd "<C-tab>") 'bury-buffer)
-
-;;line numbering
-(global-display-line-numbers-mode)
 
 ;;ediff characterwise
 (setq-default ediff-forward-word-function 'forward-char)
@@ -465,10 +401,6 @@
   (interactive)
   (dolist (f (dired-get-marked-files))
     (find-file f)))
-
-;; Change overwrite-mode binding to C-Insert
-(define-key global-map [(insert)] nil)
-(define-key global-map [(control insert)] 'overwrite-mode)
 
 ;;ivy compilation
 (use-package counsel
@@ -618,7 +550,7 @@
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs use-package solarized-theme js2-closure helm flycheck dockerfile-mode))
+   '(0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure helm flycheck dockerfile-mode))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(safe-local-variable-values
@@ -810,3 +742,9 @@
 
 ;; End:
 (put 'narrow-to-region 'disabled nil)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

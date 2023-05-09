@@ -1,11 +1,12 @@
+_flycheck_init.el
+.cache/
 session*
 auto-save-list
 eln-cache/
-.cache/
+elpa/
+geben/
 projectile.cache
 projectile-bookmarks.eld
 projects
 tramp
-geben/
 transient/
-elpa/
