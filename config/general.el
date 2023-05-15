@@ -35,6 +35,10 @@
 ;; Auto-revert (e.g. changing git branches)
 (global-auto-revert-mode t)
 
+;; Automatically close parens
+;; TODO not directly related but electric indent mode inserts unwanted spaces sometimes
+(electric-pair-mode 1)
+
 ;; Display column number
 (setq column-number-mode t)
 
