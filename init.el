@@ -1,5 +1,8 @@
 ;;Emacs config
 
+;;??
+(setq byte-compile-warnings '(cl-functions))
+
 ;; Set load path
 (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 
@@ -36,11 +39,9 @@
 (use-package ansi-color
   :ensure t)
 
-(use-package prettier
-  :ensure t)
 
-(use-package indium
-  :ensure t)
+
+
 
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
@@ -269,36 +270,7 @@
   (interactive)
   (indent-region (point-min) (point-max)))
 
-(defun convert-to-es6 ()
-  "Convert SOME ES5 style stuff to ES6. Definitely not comprehensive"
-  (interactive)
 
-  (goto-char (point-min))
-  (while (search-forward-regexp ";$" nil t)
-    (replace-match ""))
-
-  (goto-char (point-min))
-  (while (search-forward-regexp "^ *var " nil t)
-    (replace-match "let "))
-
-  (goto-char (point-min))
-  (while (search-forward-regexp "{ " nil t)
-    (replace-match "{"))
-
-  (goto-char (point-min))
-  (while (search-forward-regexp " }" nil t)
-    (replace-match "}"))
-
-  (goto-char (point-min))
-  (while (search-forward-regexp "//[^ ]" nil t)
-    (replace-match "// "))
-
-  (goto-char (point-min))
-  (while (search-forward-regexp "function(" nil t)
-    (replace-match "function ("))
-
-  (er-indent-buffer)
-)
 
 (defun er-indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
@@ -337,9 +309,6 @@
   :init
   (setq alert-default-style 'notifier))
 
-;;disable electric-indent-mode
-(electric-indent-mode -1)
-(add-hook 'after-change-major-mode-hook (lambda() (electric-indent-mode -1)))
 
 ;;whitespace-mode
 (use-package whitespace
@@ -550,7 +519,7 @@
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure helm flycheck dockerfile-mode))
+   '(with-editor lsp-mode 0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure helm flycheck dockerfile-mode))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(safe-local-variable-values
@@ -597,72 +566,6 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 
-;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
-
-;and html
-(add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
-
-;;javascript
-(use-package rjsx-mode
-  :ensure t)
-(use-package web-mode
-  :ensure t)
-
-(use-package swift-mode
-  :ensure t)
-
-(defun setup-tide-mode()
-  "Setup function for tide."
-  (interactive)
-  (flycheck-mode +1)
-  (tide-setup)
-  (setq flycheck-check-syntax-automatically `(idle-change mode-enabled))
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
-
-(use-package tide
-  :ensure t
-  :after (rjsx-mode company flycheck)
-  :hook (rjsx-mode . setup-tide-mode))
-
-;;flycheck's syntax checking should be superior to js2-mode
-(setq js2-mode-show-parse-errors nil)
-(setq js2-mode-show-strict-warnings nil)
-
-(setq-default js2-global-externs '("define"
-                                   "module"
-                                   "require"
-                                   "buster"
-                                   "sinon"
-                                   "assert"
-                                   "refute"
-                                   "setTimeout"
-                                   "clearTimeout"
-                                   "setInterval"
-                                   "clearInterval"
-                                   "location"
-                                   "__dirname"
-                                   "console"
-                                   "JSON"
-                                   "google"
-                                   "Audio"))
-
-(setq-default js2-idle-timer-delay 0.1)
-(add-to-list 'auto-mode-alist '("\\.js$" . rjsx-mode))
-(add-to-list 'auto-mode-alist '("\\.swift$" . swift-mode))
-
-(use-package amd-mode
-  :ensure t)
-
-;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
-              (append flycheck-disabled-checkers
-                      '(javascript-jshint)))
-
-;; use eslint with rjsx-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'rjsx-mode)
-
 ;; customize flycheck temp file prefix
 (setq-default flycheck-temp-prefix ".flycheck")
 
@@ -699,19 +602,15 @@
   :ensure t)
 (vimish-fold-global-mode 1)
 
-;; for better jsx syntax-highlighting in web-mode
-;; - courtesy of Patrick @halbtuerke
-(defadvice web-mode-highlight-part (around tweak-jsx activate)
-  (if (equal web-mode-content-type "jsx")
-      (let ((web-mode-enable-part-face nil))
-        ad-do-it)
-    ad-do-it))
 
 (defun my-c-hook ()
   (setq c-basic-offset 2)
   (use-package xcscope
     :ensure t)
   (cscope-setup))
+
+
+(require 'web)
 
 (add-hook 'c-mode-hook #'my-c-hook)
 
