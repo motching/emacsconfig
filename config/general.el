@@ -48,4 +48,8 @@
 ;; Set scratch message
 (setq initial-scratch-message "Far and away the best prize that life has to offer is the chance to work hard at work worth doing.")
 
+;; TODO this opens a new emacs instance from magit which is not nice
+;; emacsclient SOMETIMES works
+(setenv "EDITOR" "emacs")
+
 (provide 'general)
