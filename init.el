@@ -76,14 +76,6 @@
 ;; Projectile
 (projectile-mode +1)
 
-;;completion
-(use-package company
-  :ensure t)
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-idle-delay 0)
-(setq company-dabbrev-downcase nil)
-
 ;;bookmark cycle in all buffers
 (setq bm-cycle-all-buffers t)
 (setq bm-highlight-style 'bm-highlight-line-and-fringe)
@@ -196,11 +188,6 @@
    ("d" "Difftastic Diff (dwim)" th/magit-diff-with-difftastic)
    ("s" "Difftastic Show" th/magit-show-with-difftastic)])
 
-(transient-append-suffix 'magit-dispatch "!"
-  '("#" "My Magit Cmds" th/magit-aux-commands))
-
-(define-key magit-status-mode-map (kbd "#") #'th/magit-aux-commands)
-
 (use-package helm
   :ensure t)
 
@@ -243,9 +230,9 @@
 (global-set-key (kbd "C-c i l") 'insert-console-log)
 (global-set-key (kbd "C-c i w") 'insert-console-warning)
 (global-set-key (kbd "C-c k") 'kill-whole-line)
-(global-set-key (kbd "C-c l s") 'slack-start)
-(global-set-key (kbd "C-c l c") 'slack-channel-select)
-(global-set-key (kbd "C-c l i") 'slack-im-select)
+;; (global-set-key (kbd "C-c l s") 'slack-start)
+;; (global-set-key (kbd "C-c l c") 'slack-channel-select)
+;; (global-set-key (kbd "C-c l i") 'slack-im-select)
 (global-set-key (kbd "C-c m") 'mvn-compile)
 (global-set-key (kbd "C-c m") 'mvn-compile)
 (global-set-key (kbd "C-c n") 'narrow-split)
@@ -262,8 +249,6 @@
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c x") 'replace-regexp)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
-
-(js2r-add-keybindings-with-prefix "C-c C-z")
 
 (defun er-indent-buffer ()
   "Indent the currently visited buffer."
@@ -405,9 +390,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
- '(compilation-message-face 'default)
  '(connection-local-criteria-alist
    '(((:application tramp)
       tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
@@ -484,84 +466,26 @@
      (tramp-connection-local-default-system-profile
       (path-separator . ":")
       (null-device . "/dev/null"))))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#657b83")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    '("285d1bf306091644fb49993341e0ad8bafe57130d9981b680c1dbd974475c5c7" "0dd2666921bd4c651c7f8a724b3416e95228a13fca1aa27dc0022f4e023bf197" "653574dd35a64b45030075c99bb9e73f26d8abc7f21e145321e64fa2659fb6f5" "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c" "30289fa8d502f71a392f40a0941a83842152a68c54ad69e0638ef52f04777a4c" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
- '(fci-rule-color "#eee8d5")
  '(helm-git-grep-candidate-number-limit nil)
- '(highlight-changes-colors '("#d33682" "#6c71c4"))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#fdf6e3" 0.25)
-    '("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2")))
- '(highlight-symbol-foreground-color "#586e75")
- '(highlight-tail-colors
-   '(("#eee8d5" . 0)
-     ("#B4C342" . 20)
-     ("#69CABF" . 30)
-     ("#69B7F0" . 50)
-     ("#DEB542" . 60)
-     ("#F2804F" . 70)
-     ("#F771AC" . 85)
-     ("#eee8d5" . 100)))
- '(hl-bg-colors
-   '("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342"))
- '(hl-fg-colors
-   '("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3"))
  '(js-indent-level 4)
  '(js2-bounce-indent-p t)
  '(magit-diff-use-overlays nil)
- '(nrepl-message-colors
-   '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(with-editor lsp-mode 0x0 php-mode apache-mode swift-mode amd-mode requirejs requirejs-mode geben w3m impatient-mode impatient-showdown discover-js2-refactor erefactor dumb-jump fzf tide magit find-file-in-project indium prettier typescript-mode one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode web-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move rjsx-mode sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure helm flycheck dockerfile-mode))
- '(pos-tip-background-color "#eee8d5")
- '(pos-tip-foreground-color "#586e75")
+   '(dap-mode web-mode rjsx-mode tide which-key lsp-mode 0x0 php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf magit find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel eslint-fix ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers helm-git-grep vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure helm flycheck dockerfile-mode))
  '(safe-local-variable-values
    '((vc-prepare-patches-separately)
      (diff-add-log-use-relative-names . t)
      (vc-git-annotate-switches . "-w")))
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
  '(tab-width 4)
- '(term-default-bg-color "#fdf6e3")
- '(term-default-fg-color "#657b83")
  '(treemacs-space-between-root-nodes nil)
  '(undo-tree-auto-save-history nil)
  '(undo-tree-visualizer-timestamps t)
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   '((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2")))
- '(vc-annotate-very-old-color nil)
  '(warning-suppress-types '((comp) (comp)))
- '(web-mode-enable-auto-indentation nil)
- '(weechat-color-list
-   '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
- '(xterm-color-names
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
- '(xterm-color-names-bright
-   ["#fdf6e3" "#cb4b16" "#93a1a1" "#839496" "#657b83" "#6c71c4" "#586e75" "#002b36"]))
+ '(web-mode-enable-auto-indentation nil))
 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))

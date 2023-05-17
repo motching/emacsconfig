@@ -1,6 +1,7 @@
 _flycheck_init.el
 .cache/
-session*
+.dap-breakpoints
+.lsp-session-v1
 auto-save-list
 eln-cache/
 elpa/
@@ -8,5 +9,6 @@ geben/
 projectile.cache
 projectile-bookmarks.eld
 projects
+session*
 tramp
 transient/
