@@ -1,12 +1,20 @@
 (use-package prettier
   :ensure t)
 
-
+;;TODO does this belong here?
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 1))
+
+(use-package rjsx-mode
+  :ensure t
+  :mode "\\js\\'"
+  :hook (rjsx-mode . lsp-deferred))
+
+;; use eslint with rjsx-mode
+(flycheck-add-mode 'javascript-eslint 'rjsx-mode)
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -15,13 +23,19 @@
   :config
   (lsp-enable-which-key-integration t))
 
+;; We don't want to see superfluous messages from LSP
+;; (defvar unwanted-messages '("Connected to" "Disconnected"))
+
+;; (defun disable-lsp-msg-advice (original-lsp--info &rest r)
+;;   (unless (seq-some #'identity (mapcar (lambda (unwanted-message) (funcall #'string-prefix-p ((car r) unwanted-message) unwanted-messages)
+;;     ;;(unless (string-prefix-p "Connected to" (car r))
+;;     (apply original-lsp--info r)))
+
+;; (advice-add 'lsp--info :around #'disable-lsp-msg-advice)
+
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :hook (typescript-mode . lsp-deferred))
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :hook (js2-mode . lsp-deferred))
 
 ;;completion
 (use-package company
@@ -36,49 +50,43 @@
   (company-dabbrev-downcase nil)
   (company-idle-delay 0))
 
-(use-package dap-mode
-  :after
-  lsp-mode
-  :config
-  (dap-auto-configure-mode)
+;; (use-package dap-mode
+;;   :after
+;;   lsp-mode
+;;   :config
+;;   (dap-auto-configure-mode)
 
-  :bind
-  (("<f7>" . dap-step-in)
-   ("<f8>" . dap-next)
-   ("<f9>" . dap-continue)))
+;;   :bind
+;;   (("<f7>" . dap-step-in)
+;;    ("<f8>" . dap-next)
+;;    ("<f9>" . dap-continue)))
 
 
-(use-package dap-mode
-  :config
-  (require 'dap-firefox)
-  )
+;; (use-package dap-mode
+;;   :config
+;;   (require 'dap-firefox)
+;;   )
 
 ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
 (setq gc-cons-threshold 100000000) ;100MB
 (setq read-process-output-max (* 1024 1024)) ;; 1Mb
 
-;; (use-package company
-;;   :ensure t)
+;; use our own eslint
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint
+          (and root
+               (expand-file-name "node_modules/.bin/eslint"
+                                 root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
 
-;; (add-hook 'after-init-hook 'global-company-mode)
-;; (setq company-idle-delay 0)
-;; (setq company-dabbrev-downcase nil)
-
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 
 ;; (use-package indium
 ;;   :ensure t)
-
-;; for better jsx syntax-highlighting in web-mode
-;; - courtesy of Patrick @halbtuerke
-;; (defadvice web-mode-highlight-part (around tweak-jsx activate)
-;;   (if (equal web-mode-content-type "jsx")
-;;       (let ((web-mode-enable-part-face nil))
-;;         ad-do-it)
-;;     ad-do-it))
-
-;; use eslint with rjsx-mode for jsx files
-;; TODO more generic flycheck
-;; (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
 
 ;; disable jshint since we prefer eslint checking
 ;; (setq-default flycheck-disabled-checkers
@@ -100,46 +108,9 @@
 ;;   :after (rjsx-mode company flycheck)
 ;;   :hook (rjsx-mode . setup-tide-mode))
 
-;;flycheck's syntax checking should be superior to js2-mode
-;; (setq js2-mode-show-parse-errors nil)
-;; (setq js2-mode-show-strict-warnings nil)
-
-;; (setq-default js2-global-externs '("define"
-;;                                    "module"
-;;                                    "require"
-;;                                    "buster"
-;;                                    "sinon"
-;;                                    "assert"
-;;                                    "refute"
-;;                                    "setTimeout"
-;;                                    "clearTimeout"
-;;                                    "setInterval"
-;;                                    "clearInterval"
-;;                                    "location"
-;;                                    "__dirname"
-;;                                    "console"
-;;                                    "JSON"
-;;                                    "google"
-;;                                    "Audio"))
-
-;; (setq-default js2-idle-timer-delay 0.1)
-;; (add-to-list 'auto-mode-alist '("\\.js$" . rjsx-mode))
-;; (add-to-list 'auto-mode-alist '("\\.swift$" . swift-mode))
-
-;; ;;javascript
-;; (use-package rjsx-mode
-;;    :ensure t
-;;    :mode "\\js\\'")
-
-
-;; (use-package web-mode
-;;    :ensure t)
-
-;; ;; use web-mode for .jsx files
-;;  (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
-
-;; ;and html
-;; (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+(use-package web-mode
+  :ensure t
+  :mode "\\html\\'")
 
 (defun convert-to-es6 ()
   "Convert SOME ES5 style stuff to ES6. Definitely not comprehensive"
