@@ -90,22 +90,6 @@
 (setq gc-cons-threshold 100000000) ;100MB
 (setq read-process-output-max (* 1024 1024)) ;; 1Mb
 
-
-;; (defun setup-tide-mode()
-;;   "Setu1p function for tide."
-;;   (interactive)
-;;   (flycheck-mode +1)
-;;   (tide-setup)
-;;   (setq flycheck-check-syntax-automatically `(idle-change mode-enabled))
-;;   (tide-hl-identifier-mode +1)
-;;   (company-mode +1))
-
-
-;; (use-package tide
-;;   :ensure t
-;;   :after (rjsx-mode company flycheck)
-;;   :hook (rjsx-mode . setup-tide-mode))
-
 (use-package web-mode
   :ensure t
   :mode "\\html\\'")
