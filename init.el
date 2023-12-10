@@ -9,6 +9,7 @@
 ;; Load "modules"
 (require 'general)
 (require 'looks)
+(require 'web)
 
 ;;put backup files into a temporary directory
 (setq backup-directory-alist
@@ -41,10 +42,6 @@
 
 (use-package ansi-color
   :ensure t)
-
-
-
-
 
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
@@ -524,9 +521,6 @@
   (use-package xcscope
     :ensure t)
   (cscope-setup))
-
-
-(require 'web)
 
 (add-hook 'c-mode-hook #'my-c-hook)
 
