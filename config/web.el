@@ -8,6 +8,20 @@
   :config
   (setq which-key-idle-delay 1))
 
+;; use our own eslint
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint
+          (and root
+               (expand-file-name "node_modules/.bin/eslint"
+                                 root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
 (use-package json-mode
   :ensure t
   :mode "\\.json\\'")
@@ -15,13 +29,17 @@
 (add-hook 'json-mode-hook
           (lambda ()
             (setq-local js-indent-level 2)))
+
+;; Disable underlining for early returns in js2-mode
+(defun my-rjsx-mode-hook ()
+  (setq-local js2-highlight-external-variables nil)
+  (setq-local js2-highlight-level 1))
+
 (use-package rjsx-mode
   :ensure t
   :mode "\\js\\'"
-  :hook (rjsx-mode . lsp-deferred))
-
-;; use eslint with rjsx-mode
-(flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+    :hook (rjsx-mode . lsp-deferred)
+    :hook (rjsx-mode . my-rjsx-mode-hook))
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -78,27 +96,6 @@
 (setq gc-cons-threshold 100000000) ;100MB
 (setq read-process-output-max (* 1024 1024)) ;; 1Mb
 
-;; use our own eslint
-(defun my/use-eslint-from-node-modules ()
-  (let* ((root (locate-dominating-file
-                (or (buffer-file-name) default-directory)
-                "node_modules"))
-         (eslint
-          (and root
-               (expand-file-name "node_modules/.bin/eslint"
-                                 root))))
-    (when (and eslint (file-executable-p eslint))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
-
-(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-
-;; (use-package indium
-;;   :ensure t)
-
-;; disable jshint since we prefer eslint checking
-;; (setq-default flycheck-disabled-checkers
-;;               (append flycheck-disabled-checkers
-;;                       '(javascript-jshint)))
 
 ;; (defun setup-tide-mode()
 ;;   "Setu1p function for tide."

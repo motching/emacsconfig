@@ -6,10 +6,6 @@
 ;; Set load path
 (add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 
-;; Tell Flycheck where to find files
-;; TODO warning here
-(setq flycheck-emacs-lisp-load-path 'inherit)
-
 ;; Load "modules"
 (require 'general)
 (require 'looks)
@@ -26,6 +22,7 @@
 ;; I guess that didn't happen. This tweak is supposed to fix this.
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Save-Control.html#Auto-Save-Control
 (setq auto-save-interval 20) ;; minimum value
+
 (require 'package)
 (setq
  package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -220,8 +217,7 @@
 (global-set-key (kbd "C-c d s") 'desktop-save)
 (global-set-key (kbd "C-c d c") 'desktop-change-dir)
 (global-set-key (kbd "C-c e l") 'list-flycheck-errors)
-(global-set-key (kbd "C-c e f") 'eslint-fix) ;; doesn't work in new emacs?
-(global-set-key (kbd "C-c e i") 'er-indent-region-or-buffer)
+(global-set-key (kbd "C-c e f") 'eslint-fix)
 (global-set-key (kbd "C-c e p") 'prettier-prettify)
 (global-set-key (kbd "C-c f w") 'write-file)
 (global-set-key (kbd "C-c f d") 'delete-file)
@@ -316,12 +312,19 @@
 (setq tramp-default-user "deploy")
 (setq tramp-default-host "trucktracker.net")
 
-;; http://www.flycheck.org/manual/latest/index.html
+
+;; Tell Flycheck where to find files
+;; TODO this is just for elisp
+(setq flycheck-emacs-lisp-load-path 'inherit)
+
 (use-package flycheck
   :ensure t)
-(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-(setq flycheck-pos-tip-timeout 1)
-(setq flycheck-display-errors-function nil)
+
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc
+                                           json-jsonlist
+                                           haskell-stack-ghc))
+(setq-default flycheck-temp-prefix ".flycheck")
+
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 (use-package paren
@@ -495,19 +498,6 @@
 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
-
-;; customize flycheck temp file prefix
-(setq-default flycheck-temp-prefix ".flycheck")
-
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-              (append flycheck-disabled-checkers
-                      '(json-jsonlist)))
-
-;; this checker sucks too
-(setq-default flycheck-disabled-checkers
-              (append flycheck-disabled-checkers
-                      '(haskell-stack-ghc)))
 
 ;;error buffer hack
 (setq split-height-threshold 0)
