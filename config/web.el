@@ -46,17 +46,11 @@
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (lsp-enable-which-key-integration t))
+  (lsp-enable-which-key-integration t)
+  :hook (lsp-mode . setup-checker-chain))
 
-;; We don't want to see superfluous messages from LSP
-;; (defvar unwanted-messages '("Connected to" "Disconnected"))
-
-;; (defun disable-lsp-msg-advice (original-lsp--info &rest r)
-;;   (unless (seq-some #'identity (mapcar (lambda (unwanted-message) (funcall #'string-prefix-p ((car r) unwanted-message) unwanted-messages)
-;;     ;;(unless (string-prefix-p "Connected to" (car r))
-;;     (apply original-lsp--info r)))
-
-;; (advice-add 'lsp--info :around #'disable-lsp-msg-advice)
+(defun setup-checker-chain ()
+  (flycheck-add-next-checker 'lsp 'javascript-eslint))
 
 (use-package typescript-mode
   :mode "\\.ts\\'"
