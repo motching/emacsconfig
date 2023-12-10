@@ -8,6 +8,13 @@
   :config
   (setq which-key-idle-delay 1))
 
+(use-package json-mode
+  :ensure t
+  :mode "\\.json\\'")
+
+(add-hook 'json-mode-hook
+          (lambda ()
+            (setq-local js-indent-level 2)))
 (use-package rjsx-mode
   :ensure t
   :mode "\\js\\'"
