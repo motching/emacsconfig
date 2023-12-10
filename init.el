@@ -20,6 +20,12 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+;; I had a problem with org-mode where some stuff wasn't saved, because
+;; the default behavior is that emacs only autosaves after 300 characters
+;; typed. Auto-saving also takes place when I stop typing for a while but
+;; I guess that didn't happen. This tweak is supposed to fix this.
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Save-Control.html#Auto-Save-Control
+(setq auto-save-interval 20) ;; minimum value
 (require 'package)
 (setq
  package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
