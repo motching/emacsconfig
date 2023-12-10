@@ -16,6 +16,7 @@
 ;; Hide bars
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; Sane handling of selected text
 (delete-selection-mode 1)
