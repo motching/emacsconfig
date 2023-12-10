@@ -197,6 +197,10 @@
 (use-package helm-git-grep
   :ensure t)
 
+;; Workaround for this bug: https://github.com/yasuyk/helm-git-grep/issues/52
+;; ..temporary..?
+(setq helm-allow-mouse nil)
+
 (use-package php-mode
   :ensure t)
 
