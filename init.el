@@ -84,6 +84,12 @@
 (setq desktop-files-not-to-save "^$")
 (setq desktop-buffers-not-to-save "^$")
 
+;;portable editor configuration
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (use-package magit
   :ensure t)
 
@@ -491,7 +497,7 @@
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(deadgrep rust-auto-use rust-mode rust-playground rustic js-import dap-mode rjsx-mode tide which-key lsp-mode php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf magit find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure flycheck dockerfile-mode))
+   '(editorconfig deadgrep rust-auto-use rust-mode rust-playground rustic js-import dap-mode rjsx-mode tide which-key lsp-mode php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf magit find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure flycheck dockerfile-mode))
  '(safe-local-variable-values
    '((vc-prepare-patches-separately)
      (diff-add-log-use-relative-names . t)
