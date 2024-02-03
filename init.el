@@ -258,6 +258,7 @@
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c x") 'replace-regexp)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "C-:") 'avy-goto-char)
 
 (defun er-indent-buffer ()
   "Indent the currently visited buffer."
