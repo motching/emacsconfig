@@ -67,9 +67,13 @@
   :ensure t)
 
 ;;Undo tree
+(use-package undo-tree
+  :ensure t)
 (global-undo-tree-mode)
 
 ;; Projectile
+(use-package projectile
+  :ensure t)
 (projectile-mode +1)
 
 ;;bookmark cycle in all buffers
