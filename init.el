@@ -1,4 +1,6 @@
 ;;Emacs config
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 ;;??
 (setq byte-compile-warnings '(cl-functions))
@@ -24,15 +26,9 @@
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Save-Control.html#Auto-Save-Control
 (setq auto-save-interval 20) ;; minimum value
 
-(require 'package)
-(setq
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ;;                 ("marmalade" . "https://marmalade-repo.org/packages/")
-                    ("melpa" . "http://melpa.org/packages/")
-                    ("melpa-stable" . "http://stable.melpa.org/packages/"))
- package-archive-priorities '(("melpa-stable" . 1)))
-
+(setq package-archive-priorities '(("melpa"  . 100)
+                                   ("gnu"    .  50)
+                                   ("nongnu" .  25)))
 (package-initialize)
 
 (when (not package-archive-contents)
