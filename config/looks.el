@@ -6,11 +6,6 @@
 (load-theme 'solarized-light t)
 
 ;; Set default font
-;; TODO this is not the best font
-(set-face-attribute 'default nil
-                    :family "Monoid"
-                    :height  110
-                    :weight 'normal
-                    :width 'normal)
+(set-face-attribute 'default nil :family "Hack" :height 110)
 
 (provide 'looks)
