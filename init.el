@@ -84,8 +84,14 @@
 (setq desktop-files-not-to-save "^$")
 (setq desktop-buffers-not-to-save "^$")
 
-(use-package magit
-  :ensure t)
+;;portable editor configuration
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+ (use-package magit
+   :ensure t)
 
 ;; https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html
 
