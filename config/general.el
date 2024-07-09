@@ -1,6 +1,9 @@
 ;; Disable splash screen.
 (setq inhibit-startup-message t)
 
+;; TODO does this mess with autoimports?
+(setq default-directory "~/")
+
 ;; Show stack trace, etc. when a lisp error happens.
 (setq debug-on-error 1)
 

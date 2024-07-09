@@ -90,10 +90,10 @@
   :config
   (editorconfig-mode 1))
 
- (use-package magit
+(use-package magit
    :ensure t)
 
- (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html
 
@@ -267,6 +267,7 @@
 (global-set-key (kbd "C-c x") 'replace-regexp)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-:") 'avy-goto-char)
 
 (defun er-indent-buffer ()
   "Indent the currently visited buffer."
