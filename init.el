@@ -197,6 +197,11 @@
 (use-package helm
   :ensure t)
 
+(helm-mode 1)
+
+;; Don't use Helm for opening a project dir
+(add-to-list 'helm-completing-read-handlers-alist '(desktop-change-dir . nil))
+
 (use-package helm-git-grep
   :ensure t)
 
@@ -225,6 +230,7 @@
 (global-set-key (kbd "C-c d c") 'desktop-change-dir)
 (global-set-key (kbd "C-c e l") 'list-flycheck-errors)
 (global-set-key (kbd "C-c e f") 'eslint-fix)
+(global-set-key (kbd "C-c e n") 'flycheck-next-error)
 (global-set-key (kbd "C-c e p") 'prettier-prettify)
 (global-set-key (kbd "C-c f w") 'write-file)
 (global-set-key (kbd "C-c f d") 'delete-file)
@@ -258,6 +264,7 @@
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c x") 'replace-regexp)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "M-o") 'other-window)
 
 (defun er-indent-buffer ()
   "Indent the currently visited buffer."
@@ -352,6 +359,7 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8-unix)
 
 ;;ediff characterwise
 (setq-default ediff-forward-word-function 'forward-char)
@@ -493,11 +501,12 @@
  '(js2-bounce-indent-p t)
  '(js2-highlight-level 0)
  '(js2-mode-show-strict-warnings nil)
+ '(lsp-ui-sideline-show-hover nil)
  '(magit-diff-use-overlays nil)
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(deadgrep rust-auto-use rust-mode rust-playground rustic js-import dap-mode rjsx-mode tide which-key lsp-mode php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf magit find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure flycheck dockerfile-mode))
+   '(eslint-fix typescript-mode magit editorconfig deadgrep rust-auto-use rust-mode rust-playground rustic js-import dap-mode rjsx-mode tide which-key php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure flycheck dockerfile-mode))
  '(safe-local-variable-values
    '((vc-prepare-patches-separately)
      (diff-add-log-use-relative-names . t)
