@@ -93,6 +93,8 @@
  (use-package magit
    :ensure t)
 
+ (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;; https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html
 
 (defun th/magit--with-difftastic (buffer command)
