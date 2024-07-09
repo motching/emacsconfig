@@ -47,6 +47,7 @@
     :hook (rjsx-mode . my-rjsx-mode-hook))
 
 (use-package lsp-mode
+  :ensure t
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l")
@@ -57,12 +58,19 @@
 (defun setup-checker-chain ()
   (flycheck-add-next-checker 'lsp 'javascript-eslint))
 
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+  )
+(use-package lsp-treemacs :ensure t)
+
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :hook (typescript-mode . lsp-deferred))
 
 ;;completion
 (use-package company
+  :ensure t
   :after lsp-mode
   :hook (lsp-mode . company-mode)
   :bind (:map company-active-map
