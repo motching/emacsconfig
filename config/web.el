@@ -18,9 +18,14 @@
                (expand-file-name "node_modules/.bin/eslint"
                                  root))))
     (when (and eslint (file-executable-p eslint))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
+      (setq-local flycheck-javascript-eslint-executable eslint)
+      (setq-local eslint-fix-executable eslint))))
 
 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
+;; TODO this needs to use the custom eslint as well
+(use-package eslint-fix
+  :ensure t)
 
 (use-package json-mode
   :ensure t
