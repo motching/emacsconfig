@@ -46,6 +46,9 @@
     :hook (rjsx-mode . lsp-deferred)
     :hook (rjsx-mode . my-rjsx-mode-hook))
 
+;; LSP for different major modes:
+;; https://github.com/flycheck/flycheck/issues/1762
+
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
