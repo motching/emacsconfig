@@ -60,4 +60,7 @@
 ;; emacsclient SOMETIMES works
 (setenv "EDITOR" "emacs")
 
+(setq desktop-path '("~/.emacs.d"))
+(desktop-save-mode 1)
+
 (provide 'general)
