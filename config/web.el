@@ -55,7 +55,10 @@
   (lsp-enable-which-key-integration t)
   :hook (lsp-mode . setup-checker-chain))
 
+;; https://github.com/emacs-lsp/lsp-mode/issues/2594
 (defun setup-checker-chain ()
+  (require 'lsp-diagnostics)
+  (lsp-diagnostics-flycheck-enable)
   (flycheck-add-next-checker 'lsp 'javascript-eslint))
 
 (use-package lsp-ui
