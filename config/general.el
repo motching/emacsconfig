@@ -28,6 +28,8 @@
 ;; TODO documentation for this
 (cua-selection-mode 1)
 
+(setq case-fold-search nil)
+
 ;; Smooth scrolling
 ;; TODO Emacs 29 can do this natively??
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))
