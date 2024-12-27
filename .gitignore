@@ -1,3 +1,5 @@
+.emacs.desktop
+.emacs.desktop.lock
 _flycheck_init.el
 .cache/
 .dap-breakpoints
