@@ -80,7 +80,7 @@
   :custom
   (company-minimum-prefix-length 1)
   (company-dabbrev-downcase nil)
-  (company-idle-delay 0))
+  (company-idle-delay 0.0))
 
 ;; (use-package dap-mode
 ;;   :after
