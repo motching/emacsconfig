@@ -13,6 +13,8 @@
 (require 'looks)
 (require 'web)
 
+ (setq ring-bell-function 'ignore)
+
 ;;put backup files into a temporary directory
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -246,6 +248,8 @@
 (global-set-key (kbd "C-c i k") 'insert-ko-context-log)
 (global-set-key (kbd "C-c i l") 'insert-console-log)
 (global-set-key (kbd "C-c i w") 'insert-console-warning)
+(global-set-key (kbd "C-c f d") 'remove-define) ;; temporary
+(global-set-key (kbd "C-c f i") 'convert-to-import) ;; temporary
 (global-set-key (kbd "C-c k") 'kill-whole-line)
 ;; (global-set-key (kbd "C-c l s") 'slack-start)
 ;; (global-set-key (kbd "C-c l c") 'slack-channel-select)
@@ -417,89 +421,72 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(comment-column 80)
  '(connection-local-criteria-alist
-   '(((:application eshell)
-      eshell-connection-default-profile)
-     ((:application tramp)
-      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+   '(((:application eshell) eshell-connection-default-profile)
+     ((:application tramp) tramp-connection-local-default-system-profile
+      tramp-connection-local-default-shell-profile)))
  '(connection-local-profile-alist
-   '((eshell-connection-default-profile
-      (eshell-path-env-list))
+   '((eshell-connection-default-profile (eshell-path-env-list))
      (tramp-connection-local-darwin-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . tramp-ps-time)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
+      (tramp-process-attributes-ps-args "-acxww" "-o"
+                                        "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o" "state=abcde" "-o"
+                                        "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number) (euid . number)
+                                          (user . string) (egid . number)
+                                          (comm . 52) (state . 5)
+                                          (ppid . number) (pgrp . number)
+                                          (sess . number) (ttname . string)
+                                          (tpgid . number) (minflt . number)
+                                          (majflt . number)
+                                          (time . tramp-ps-time) (pri . number)
+                                          (nice . number) (vsize . number)
+                                          (rss . number) (etime . tramp-ps-time)
+                                          (pcpu . number) (pmem . number) (args)))
      (tramp-connection-local-busybox-ps-profile
-      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (user . string)
-       (group . string)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (ttname . string)
-       (time . tramp-ps-time)
-       (nice . number)
-       (etime . tramp-ps-time)
-       (args)))
+      (tramp-process-attributes-ps-args "-o"
+                                        "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o" "stat=abcde" "-o"
+                                        "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format (pid . number) (user . string)
+                                          (group . string) (comm . 52)
+                                          (state . 5) (ppid . number)
+                                          (pgrp . number) (ttname . string)
+                                          (time . tramp-ps-time) (nice . number)
+                                          (etime . tramp-ps-time) (args)))
      (tramp-connection-local-bsd-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (group . string)
-       (comm . 52)
-       (state . string)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . number)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
-     (tramp-connection-local-default-shell-profile
-      (shell-file-name . "/bin/sh")
-      (shell-command-switch . "-c"))
-     (tramp-connection-local-default-system-profile
-      (path-separator . ":")
-      (null-device . "/dev/null"))))
+      (tramp-process-attributes-ps-args "-acxww" "-o"
+                                        "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "-o"
+                                        "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format (pid . number) (euid . number)
+                                          (user . string) (egid . number)
+                                          (group . string) (comm . 52)
+                                          (state . string) (ppid . number)
+                                          (pgrp . number) (sess . number)
+                                          (ttname . string) (tpgid . number)
+                                          (minflt . number) (majflt . number)
+                                          (time . tramp-ps-time) (pri . number)
+                                          (nice . number) (vsize . number)
+                                          (rss . number) (etime . number)
+                                          (pcpu . number) (pmem . number) (args)))
+     (tramp-connection-local-default-shell-profile (shell-file-name . "/bin/sh")
+                                                   (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile (path-separator . ":")
+                                                    (null-device . "/dev/null"))))
  '(custom-safe-themes
-   '("285d1bf306091644fb49993341e0ad8bafe57130d9981b680c1dbd974475c5c7" "0dd2666921bd4c651c7f8a724b3416e95228a13fca1aa27dc0022f4e023bf197" "653574dd35a64b45030075c99bb9e73f26d8abc7f21e145321e64fa2659fb6f5" "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c" "30289fa8d502f71a392f40a0941a83842152a68c54ad69e0638ef52f04777a4c" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
+   '("285d1bf306091644fb49993341e0ad8bafe57130d9981b680c1dbd974475c5c7"
+     "0dd2666921bd4c651c7f8a724b3416e95228a13fca1aa27dc0022f4e023bf197"
+     "653574dd35a64b45030075c99bb9e73f26d8abc7f21e145321e64fa2659fb6f5"
+     "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358"
+     "00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c"
+     "30289fa8d502f71a392f40a0941a83842152a68c54ad69e0638ef52f04777a4c"
+     "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0"
+     "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
+     "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
  '(desktop-load-locked-desktop 'check-pid)
+ '(fill-column 80)
  '(helm-git-grep-candidate-number-limit nil)
  '(js-indent-level 4)
  '(js2-bounce-indent-p t)
@@ -510,10 +497,15 @@
  '(org-startup-folded 'showeverything)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(eslint-fix typescript-mode magit editorconfig deadgrep rust-auto-use rust-mode rust-playground rustic js-import dap-mode rjsx-mode tide which-key php-mode apache-mode geben w3m impatient-mode impatient-showdown erefactor fzf find-file-in-project prettier one-themes silkworm-theme plan9-theme xcscope counsel-etags yaml-mode flycheck-yamllint less-css-mode elm-mode bm undo-tree org-jira js-doc company-tern tern counsel ivy paredit buffer-move sass-mode json-mode flx-ido helm-projectile projectile live-py-mode flycheck-pycheckers vimish-fold exec-path-from-shell mvn rainbow-delimiters hindent ghc ghc-imported-from ghci-completion scion treemacs solarized-theme js2-closure flycheck dockerfile-mode))
+   '(0blayout 0x0 0xc 2048-game 2bit 750words @ alert cargo cargo-mode
+              cargo-transient claude-code company counsel eslint-fix
+              exec-path-from-shell flycheck flycheck-rust helm helm-git-grep
+              json-mode lsp-treemacs lsp-ui magit php-mode prettier
+              rainbow-delimiters rjsx-mode rust-auto-use rust-playground rustic
+              solarized-theme typescript-mode undo-tree vdiff vimish-fold
+              web-mode which-key))
  '(safe-local-variable-values
-   '((vc-prepare-patches-separately)
-     (diff-add-log-use-relative-names . t)
+   '((vc-prepare-patches-separately) (diff-add-log-use-relative-names . t)
      (vc-git-annotate-switches . "-w")))
  '(tab-width 4)
  '(treemacs-space-between-root-nodes nil)
@@ -560,7 +552,15 @@
    (kmacro "C-a RET C-p <tab> c o n s o l e . e r r o r ( ) ; C-b C-b"))
 
 (defalias 'insert-debugger
-   (kmacro "C-a RET C-p <tab> i f SPC ( t r u e ) SPC { SPC d e b u g g e r ; SPC } C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b"))
+  (kmacro "C-a RET C-p <tab> i f SPC ( t r u e ) SPC { SPC d e b u g g e r ; SPC } C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b C-b"))
+
+;; temporary
+(defalias 'remove-define
+   (kmacro "M-> <up> <down> <up> C-S-<backspace> C-r d e f i n e ( f <return> C-S-<backspace> C-S-<backspace> C-x SPC M-> <right> <right> <right> <right> <backspace>"))
+
+;;temporary
+(defalias 'convert-to-import
+   (kmacro "C-a C-SPC M-f C-d i m p o r t <right> { <delete> C-s \\ s - <return> <left> } <right> C-d C-d C-d C-d C-d C-d C-d C-d C-d C-d f r o m SPC C-s C-q ) <return> C-k <backspace> ;"))
 
 (fset 'insert-ko-context-log
       (kmacro-lambda-form [up ?\C-e return ?< ?s ?p ?a ?n ?  ?d ?a ?t ?a ?- ?b ?i ?n ?d ?= ?t ?e ?x ?t ?: ?  ?f ?u ?n ?c ?t ?i ?o ?n ?  ?\( ?\) ?\S-  ?\{ ?c ?o ?n ?s ?o ?l ?e ?. ?l ?o ?g ?\( ?\) ?\; ?\} ?  ?\( ?\) ?\C-e ?> ?< ?/ left left left left left left left left] 0 "%d"))
@@ -576,3 +576,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'upcase-region 'disabled nil)

@@ -16,6 +16,11 @@
 ;; We don't need lockfiles.
 (setq create-lockfiles nil)
 
+;; Keep backups and auto-saves out of project dirs and /tmp (prevents LSP from
+;; picking up .ts~ files as TypeScript sources).
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups/")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-saves/" t)))
+
 ;; Hide bars
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -42,8 +47,8 @@
 (global-auto-revert-mode t)
 
 ;; Automatically close parens
-;; TODO not directly related but electric indent mode inserts unwanted spaces sometimes
 (electric-pair-mode 1)
+(setq electric-pair-skip-whitespace nil)
 
 ;; Display column number
 (setq column-number-mode t)
@@ -64,5 +69,10 @@
 
 (setq desktop-path '("~/.emacs.d"))
 (desktop-save-mode 1)
+
+(defun kill-other-buffers ()
+  "Kill all buffers except the current one."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
 (provide 'general)

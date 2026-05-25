@@ -12,12 +12,13 @@
 (defun my/use-eslint-from-node-modules ()
   (let* ((root (locate-dominating-file
                 (or (buffer-file-name) default-directory)
-                "node_modules"))
+                (lambda (dir)
+                  (file-executable-p
+                   (expand-file-name "node_modules/.bin/eslint" dir)))))
          (eslint
           (and root
-               (expand-file-name "node_modules/.bin/eslint"
-                                 root))))
-    (when (and eslint (file-executable-p eslint))
+               (expand-file-name "node_modules/.bin/eslint" root))))
+    (when eslint
       (setq-local flycheck-javascript-eslint-executable eslint)
       (setq-local eslint-fix-executable eslint))))
 
@@ -31,9 +32,9 @@
   :ensure t
   :mode "\\.json\\'")
 
-(add-hook 'json-mode-hook
-          (lambda ()
-            (setq-local js-indent-level 2)))
+;; (add-hook 'json-mode-hook
+;;           (lambda ()
+;;             (setq-local js-indent-level 2)))
 
 ;; Disable underlining for early returns in js2-mode
 (defun my-rjsx-mode-hook ()
@@ -63,6 +64,11 @@
   (require 'lsp-diagnostics)
   (lsp-diagnostics-flycheck-enable)
   (flycheck-add-next-checker 'lsp 'javascript-eslint))
+
+;; javascript-eslint's built-in mode list excludes typescript-mode, so the
+;; lsp→eslint chain silently stops for .ts files without this.
+(with-eval-after-load 'flycheck
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode))
 
 (use-package lsp-ui
   :ensure t
