@@ -15,11 +15,20 @@
 
  (setq ring-bell-function 'ignore)
 
-;;put backup files into a temporary directory
+;; Put backup and auto-save files into a dedicated directory.
+;; NOTE: deliberately NOT temporary-file-directory (/tmp). Backups there are
+;; named `!home!user!...!foo.ts~`, and `file-name-sans-versions` strips the
+;; trailing `~` during mode detection — so `foo.ts~` opens in typescript-mode,
+;; lsp-deferred attaches, and tsserver indexes the backup as a real source file.
+;; Its exports then show up as auto-import candidates and completion writes
+;; imports pointing at /tmp. Keeping them here keeps them out of the LSP's way.
+(defvar my/backup-directory (expand-file-name "backups/" user-emacs-directory))
+(unless (file-directory-p my/backup-directory)
+  (make-directory my/backup-directory t))
 (setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+      `((".*" . ,my/backup-directory)))
 (setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+      `((".*" ,my/backup-directory t)))
 
 ;; I had a problem with org-mode where some stuff wasn't saved, because
 ;; the default behavior is that emacs only autosaves after 300 characters
