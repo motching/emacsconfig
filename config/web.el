@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (use-package prettier
   :ensure t)
 

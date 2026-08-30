@@ -1,4 +1,4 @@
-;;Emacs config
+;;Emacs config  -*- lexical-binding: t; -*-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
@@ -102,7 +102,19 @@
   (editorconfig-mode 1))
 
 (use-package magit
-   :ensure t)
+  :ensure t
+  :config
+  ;; Detect renames at a 20% similarity index (git's default is 50%).
+  ;; Magit resolves diff arguments per major mode, so append -M20% to each
+  ;; mode's defaults rather than replacing them.
+  (dolist (mode '(magit-status-mode
+                  magit-diff-mode
+                  magit-revision-mode
+                  magit-stash-mode
+                  magit-merge-preview-mode))
+    (let ((args (get mode 'magit-diff-default-arguments)))
+      (unless (seq-find (lambda (a) (string-prefix-p "-M" a)) args)
+        (put mode 'magit-diff-default-arguments (cons "-M20%" args))))))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 

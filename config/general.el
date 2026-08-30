@@ -1,4 +1,4 @@
-;; Disable splash screen.
+;; Disable splash screen.  -*- lexical-binding: t; -*-
 (setq inhibit-startup-message t)
 
 ;; TODO does this mess with autoimports?

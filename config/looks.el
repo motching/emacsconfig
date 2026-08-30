@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; TODO config use-package here?
 (use-package solarized-theme
   :ensure t)
